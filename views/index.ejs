@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Busca-CEP</title>
+</head>
+
+<style>
+#area{
+    height: 200px;
+    
+}
+</style>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Consulta CEP</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="invalid" class="alert alert-warning" role="alert" style="display: none">
+            CEP Inválido
+        </div>
+
+        <label name="cep"> CEP </label>
+        <input name="cep" id="cep" class="form-control" type="number" placeholder="Digite o CEP" \>
+        <br>
+        <button onclick="consultarCep()" class="btn btn-outline-primary"> BUSCAR CEP </button>
+        <hr>
+        <textarea height=300 id="area" class="form-control rounded-0 md-textarea">
+        </textarea>
+    </div>
+</body>
+
+<script>
+    function consultarCep() {
+        const cep = document.getElementById("cep").value;
+        const area = document.getElementById("area");
+        const warning = document.getElementById("invalid");
+
+        console.log(cep);
+
+        axios.get(`http://viacep.com.br/ws/${cep}/json/`)
+            .then(response => {
+                console.log(response.data)
+
+                if (response.data.uf == undefined) {
+                    area.value = "CEP Inválido"
+                    warning.style.display = "block";
+                } else {
+                    warning.style.display = "none";
+                    area.value =
+                        `Unidade Federal: ${response.data.uf}\n` +
+                        `Cidade: ${response.data.localidade}\n` +
+                        `Bairro: ${response.data.bairro}\n` +
+                        `Logradouro: ${response.data.logradouro}\n` +
+                        `IBGE: ${response.data.ibge}\n`
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                warning.style.display = "block";
+                area.value = "CEP Inválido"
+            })
+    }
+</script>
+
+</html>
