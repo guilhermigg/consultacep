@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+
+body{
+    font-family: 'Titillium Web', sans-serif;
+}
+
+@media(max-width: 720px){
+    .table{
+        width: 100%;
+        font-size: 12px;
+        display: block;
+    }
+    .table-responsive td,
+    .table-responsive th {
+    height: 35px;
+    }
+}
